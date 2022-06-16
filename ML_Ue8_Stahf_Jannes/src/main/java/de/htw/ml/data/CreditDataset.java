@@ -1,7 +1,9 @@
 package de.htw.ml.data;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -50,16 +52,61 @@ public class CreditDataset implements Dataset {
 		// normalize the data sets and add the bias column
 		FloatMatrix xNorm = x.subRowVector(xMin).diviRowVector(xMax.sub(xMin));		
 		xNorm = FloatMatrix.concatHorizontally(FloatMatrix.ones(xNorm.rows, 1), xNorm);
-		
-		// TODO create a training and test set with 90% and 10% of all data respectively
-		// TODO the test set should contain images from all categories in equal amount
+
 		int testDataPerCategory = data.getRows() / 10 / categories.length; // 10% test set
 		int testDataCount = testDataPerCategory * categories.length;
 		System.out.println("Use "+testDataCount+" as test data with "+testDataPerCategory+" elements per category.\n");
 		
-		// TODO replace these lines with the real train and test data
-		xTrain = xTest = xNorm;
-		yTrain = yTest = y;
+
+		divideData(xNorm, y, testDataPerCategory);
+	}
+
+	/**
+	 * Takes all data and divides it into a training and test set. Ultimately writes the values into
+	 * the classes fields holding the 4 corresponding matrices.
+	 *
+	 * @param xNorm normalized x values
+	 * @param y y values
+	 * @param testDataPerCategory how many data for each (of 3) catergories
+	 * @author Jannes Stahf
+	 */
+	private void divideData(FloatMatrix xNorm, FloatMatrix y, int testDataPerCategory) {
+
+		int y1 = 0;
+		int y2 = 0;
+		int y3 = 0;
+
+		// the following reduces in-loop-code by a few lines
+		yTrain = y.getRow(0);
+		xTrain = xNorm.getRow(0);
+
+		for(int i = 1; i<xNorm.rows; i++) {
+
+			switch((int) y.get(i)) {
+				case 1:
+					y1++;
+					break;
+				case 2:
+					y2++;
+					break;
+				case 3:
+					y3++;
+					break;
+			}
+
+			if((y.get(i) == 1 && y1>testDataPerCategory) || (y.get(i) == 2 && y2>testDataPerCategory) || (y.get(i) == 3 && y3>testDataPerCategory)){
+				yTrain = FloatMatrix.concatVertically(yTrain, y.getRow(i));
+				xTrain = FloatMatrix.concatVertically(xTrain, xNorm.getRow(i));
+			} else {
+				if (yTest == null) {
+					yTest = y.getRow(i);
+					xTest = xNorm.getRow(i);
+				} else {
+					yTest = FloatMatrix.concatVertically(yTest, y.getRow(i));
+					xTest = FloatMatrix.concatVertically(xTest, xNorm.getRow(i));
+				}
+			}
+		}
 	}
 	
 	public int[] getCategories() {
@@ -67,7 +114,6 @@ public class CreditDataset implements Dataset {
 	}
 	
 	/**
-	 * TODO Produce a subset. It contains all the test data but the y-values are binarized.
 	 * The train data should contain as many train entries as possible but the ration 
 	 * between data points of the desired category and data points of a different category
 	 * should be 50:50. All Y data are binarized:
@@ -76,14 +122,36 @@ public class CreditDataset implements Dataset {
 	 * 
 	 * @param category
 	 * @return {x Matrix,y Matrix}
+	 * @author Nico Hezel & Jannes Stahf
 	 */
 	public Dataset getSubset(int category) {
-		
-		// TODO Find all the indices of the lines in which the desired category occurs. 
+
 		// Search as many other lines with a different category. Remove indices if
 		// necessary, to ensure the size of both set are the same
-		int[] rowIndizies = new int[] { 1 };
-		
+
+		List<Integer> desiredIndices = new ArrayList<>();
+		List<Integer> otherIndices = new ArrayList<>();
+
+		// check for desired category and save index
+		for(int i = 0; i<yTrain.length; i++) {
+			if(yTrain.get(i) == category) {
+				desiredIndices.add(i);
+			} else {
+				otherIndices.add(i);
+			}
+		}
+
+		// if one set is bigger -> make them 50:50
+		if(desiredIndices.size()>otherIndices.size()) {
+			desiredIndices = desiredIndices.subList(0, otherIndices.size());
+		} else {
+			otherIndices = otherIndices.subList(0, desiredIndices.size());
+		}
+
+		otherIndices.addAll(desiredIndices); // join them together
+
+		int[] rowIndizies = otherIndices.stream().mapToInt(i -> i).toArray(); // convert to int[]
+
 		// Get the desired data points and binarize the Y-values
 		return new Dataset() {
 			

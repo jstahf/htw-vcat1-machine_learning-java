@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  * 
  * @author Nico Hezel
  */
-public class Ue08a_Vorlage_Java {
+public class ML_Ue8a_Stahf_Jannes {
 	
 	private static final int TrainingIterations = 3000;
 	private static final float LearnRate = 0.5f;

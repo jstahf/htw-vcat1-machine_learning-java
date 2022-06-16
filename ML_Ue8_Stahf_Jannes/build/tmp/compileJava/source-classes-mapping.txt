@@ -1,0 +1,10 @@
+de/htw/ml/data/Dataset.java
+ de.htw.ml.data.Dataset
+de/htw/ml/data/CreditDataset.java
+ de.htw.ml.data.CreditDataset
+ de.htw.ml.data.CreditDataset$1
+de/htw/ml/LogisticRegression.java
+ de.htw.ml.LogisticRegression
+de/htw/ml/ML_Ue8a_Stahf_Jannes.java
+ de.htw.ml.ML_Ue8a_Stahf_Jannes
+ de.htw.ml.ML_Ue8a_Stahf_Jannes$FXApplication

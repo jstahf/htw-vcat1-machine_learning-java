@@ -3,9 +3,7 @@ package de.htw.ml;
 import org.jblas.FloatMatrix;
 
 /**
- * A lot of TODOs here.
- * This is a simple logistic regression model.
- *  
+ *
  * @author Nico Hezel
  */
 public class LogisticRegression {
@@ -37,15 +35,26 @@ public class LogisticRegression {
 		
 		// training
 		for (int iteration = 0; iteration < trainingIterations; iteration++) {
-			
-			// TODO training using the logistic regression	
-			
-			// TODO fill the prediction rate and train error arrays
-			predictionRates[iteration] = 0;
-			trainErrors[iteration] = 0;
+			predictionRates[iteration] = predictionRate(predict(xTest, theta), yTest);
+			trainErrors[iteration] = cost(predict(xTrain, theta), yTrain);
+
+			if(predictionRates[iteration] > bestPredictionRate) {
+				bestPredictionRate = predictionRates[iteration];
+				bestTheta = theta;
+			}
+			theta = changeTheta(xTrain, yTrain, theta, learnRate);
 		}
 		
 		return bestTheta;
+	}
+
+	private FloatMatrix changeTheta(FloatMatrix xTrain, FloatMatrix yTrain, FloatMatrix theta, float learnRate) {
+
+		FloatMatrix h = predict(xTrain, theta).sub(yTrain).transpose();
+
+		FloatMatrix newTheta = theta.sub(h.mmul(xTrain).mul(learnRate / yTrain.length));
+
+		return newTheta;
 	}
 
 	/**
@@ -56,8 +65,16 @@ public class LogisticRegression {
 	 * @return
 	 */
 	public static FloatMatrix predict(FloatMatrix x, FloatMatrix theta) {
-		// TODO Auto-generated method stub
-		return null;
+		FloatMatrix y;
+		if(x.columns != theta.rows) {
+			y = x.transpose().mmul(theta);
+		} else {
+			y = x.mmul(theta);
+		}
+
+		y = sigmoidi(y);
+
+		return y;
 	}
 		
 	/**
@@ -68,8 +85,7 @@ public class LogisticRegression {
 	 * @return
 	 */
 	public static float cost(FloatMatrix prediction, FloatMatrix y) {
-		// TODO Auto-generated method stub
-		return 0;
+		return prediction.sub(y).norm1() / y.length;
 	}
 
 	/**
@@ -80,8 +96,10 @@ public class LogisticRegression {
 	 * @return
 	 */
 	public static float predictionRate(FloatMatrix prediction, FloatMatrix y) {
-		// TODO Auto-generated method stub
-		return 0;
+		prediction = prediction.ge(0.5f);
+		float rate = prediction.sub(y).norm1();
+		rate = (y.length-rate)/y.length * 100;
+		return  rate;
 	}
 
 	/**
