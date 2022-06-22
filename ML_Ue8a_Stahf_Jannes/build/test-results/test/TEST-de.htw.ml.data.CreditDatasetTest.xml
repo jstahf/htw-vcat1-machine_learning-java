@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.htw.ml.data.CreditDatasetTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-06-22T10:29:52" hostname="DESKTOP-R9DIQU5" time="0.005">
+  <properties/>
+  <testcase name="createTestsetCountTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.003"/>
+  <testcase name="createTrainingssetBinaryTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.001"/>
+  <testcase name="trainsetCountTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.0"/>
+  <testcase name="testsetCountTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.0"/>
+  <testcase name="testsetEqualLabelTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.0"/>
+  <testcase name="categoryTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.0"/>
+  <testcase name="createTestsetBinaryTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.0"/>
+  <testcase name="categoryCountTest" classname="de.htw.ml.data.CreditDatasetTest" time="0.0"/>
+  <system-out><![CDATA[Done reading file
+The unique values of y are [1, 2, 3] and there number of occurrences are [179, 714, 107]
+Use 99 as test data with 33 elements per category.
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
