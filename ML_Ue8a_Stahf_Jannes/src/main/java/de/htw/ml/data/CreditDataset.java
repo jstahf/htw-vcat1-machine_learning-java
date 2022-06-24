@@ -71,6 +71,7 @@ public class CreditDataset implements Dataset {
 	 * @author Jannes Stahf
 	 */
 	private void divideData(FloatMatrix xNorm, FloatMatrix y, int testDataPerCategory) {
+		FloatMatrix data = xNorm.copy(xNorm);
 
 		int y1 = 0;
 		int y2 = 0;
@@ -80,7 +81,8 @@ public class CreditDataset implements Dataset {
 		yTrain = y.getRow(0);
 		xTrain = xNorm.getRow(0);
 
-		for(int i = 1; i<xNorm.rows; i++) {
+		while (xTest == null || xTrain.length+xTest.length<xNorm.length){
+			int i = rnd.nextInt(data.rows); // random values for better represantation/results
 
 			switch((int) y.get(i)) {
 				case 1:
@@ -106,6 +108,7 @@ public class CreditDataset implements Dataset {
 					xTest = FloatMatrix.concatVertically(xTest, xNorm.getRow(i));
 				}
 			}
+			data = FloatMatrix.concatVertically(data.getRange(0, i,0 ,data.columns), data.getRange(i, data.rows, 0 , data.columns));
 		}
 	}
 	

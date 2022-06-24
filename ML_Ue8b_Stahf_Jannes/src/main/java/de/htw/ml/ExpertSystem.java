@@ -56,7 +56,7 @@ public class ExpertSystem {
 	}
 		
 	/**
-	 * TODO Missing the search for the strongest prediction
+	 *
 	 * 
 	 * @param dataset
 	 * @return
@@ -73,9 +73,14 @@ public class ExpertSystem {
 		int correctSum = 0;
 		for (int r = 0; r < yTest.getRows(); r++) {
 			int expectedLabel = (int)yTest.data[r];
-			
-			// TODO ... and find the strongest one (highest value) 
-			float hypothesisLabel = -1;
+
+
+			float hypothesisLabel = 1;
+
+			for(int i = 1; i<hypothesisArr.length; i++) {
+				if(hypothesisArr[i].data[r] > hypothesisArr[i-1].data[r]) hypothesisLabel = i+1;
+			}
+
 
 			// count how many times the system found the right label
 			if(expectedLabel == hypothesisLabel)

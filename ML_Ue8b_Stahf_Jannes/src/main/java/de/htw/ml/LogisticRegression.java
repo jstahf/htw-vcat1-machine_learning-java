@@ -85,7 +85,7 @@ public class LogisticRegression {
 	 * @return
 	 */
 	public static float cost(FloatMatrix prediction, FloatMatrix y) {
-		return prediction.sub(y).norm1() / y.length;
+		return (float) Math.sqrt(prediction.sub(y).mul(prediction.sub(y)).mean());
 	}
 
 	/**
