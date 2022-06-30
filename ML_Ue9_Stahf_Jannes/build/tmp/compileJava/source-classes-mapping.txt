@@ -1,0 +1,5 @@
+de/htw/ml/NeuralNet.java
+ de.htw.ml.NeuralNet
+de/htw/ml/ML_Ue09_Stahf_Jannes.java
+ de.htw.ml.ML_Ue09_Stahf_Jannes
+ de.htw.ml.ML_Ue09_Stahf_Jannes$FXApplication
